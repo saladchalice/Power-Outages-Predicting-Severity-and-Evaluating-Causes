@@ -25,15 +25,18 @@ The dataset is a collection of major power outages in the continental United Sta
 
 # Data Cleaning and Exploratory Data Analysis
 ## Data Cleaning
-1. I first converted the existing columns >OUTAGE.START.DATE, >OUTAGE.START.TIME, and > OUTAGE.RESTORATION.DATE, > OUTAGE.RESTORATION.TIME into two timestamp columns in order to be useful for analysis, > OUTAGE.START and > OUTAGE.RESTORATION
-2. I then dropped columns I determined were not suitable for analysis, either because they were not relevant or they contained too many missing values to be useful for analysis/prediction. 
-- The variables I ended up keeping were:
-	- Variables directly involved with answering research question: > US._STATE, > CLIMATE.REGION, > CLIMATE.CATEGORY, > CAUSE.CATEGORY, > DEMAND.LOSS.MW, > TOTAL.CUSTOMERS, > PCT_WATER_INLAND, > PCT_LAND, > AREAPCT_UC, > PCT_WATER_TOT, > POPULATION
-	- Variables for learning more about the data: > OUTAGE.START, > OUTAGE.RESTORATION, > CUSTOMERS.AFFECTED, > DEMAND.LOSS.MW (the latter two are relevant to the question but have too many missing values to be used for analysis, so I used them to understand other columns better). 
+1. I first converted the existing columns `OUTAGE.START.DATE`, `OUTAGE.START.TIME`, and `OUTAGE.RESTORATION.DATE`, `OUTAGE.RESTORATION.TIME` into two timestamp columns in order to be useful for analysis, `OUTAGE.START` and `OUTAGE.RESTORATION`.
+2. I then dropped columns I determined were not suitable for analysis, either because they were not relevant or they contained too many missing values to be useful for analysis/prediction.
+   - The variables I ended up keeping were:
+     - Variables directly involved with answering the research question: `US._STATE`, `CLIMATE.REGION`, `CLIMATE.CATEGORY`, `CAUSE.CATEGORY`, `DEMAND.LOSS.MW`, `TOTAL.CUSTOMERS`, `PCT_WATER_INLAND`, `PCT_LAND`, `AREAPCT_UC`, `PCT_WATER_TOT`, `POPULATION`
+     - Variables for learning more about the data: `OUTAGE.START`, `OUTAGE.RESTORATION`, `CUSTOMERS.AFFECTED`, `DEMAND.LOSS.MW` (the latter two are relevant to the question but have too many missing values to be used for analysis, so I used them to understand other columns better).
+
+3. I then replaced values of 0 in `OUTAGE.DURATION` with `np.NaN`, as a severe power outage will not be just 0 minutes.
 
 3. I then replaced values of 0 in OUTAGE.DURATION with np.NaN, as a severe power outage will not be just 0 minutes. 
 
 This led to my dataset appearing like (only a select number of columns have been included for aesthetic purposes):
+<div style="overflow-x: auto;">
 
 | U.S._STATE   | CLIMATE.REGION     | CLIMATE.CATEGORY   | CAUSE.CATEGORY     |   OUTAGE.DURATION |   DEMAND.LOSS.MW |
 |:-------------|:-------------------|:-------------------|:-------------------|------------------:|-----------------:|
