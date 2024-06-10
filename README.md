@@ -33,13 +33,10 @@ The dataset is a collection of major power outages in the continental United Sta
 
 3. I then replaced values of 0 in `OUTAGE.DURATION` with `np.NaN`, as a severe power outage will not be just 0 minutes.
 
-3. I then replaced values of 0 in OUTAGE.DURATION with np.NaN, as a severe power outage will not be just 0 minutes. 
-
 This led to my dataset appearing like (only a select number of columns have been included for aesthetic purposes):
 <div style="overflow-x: auto;">
 
 | U.S._STATE   | CLIMATE.REGION     | CLIMATE.CATEGORY   | CAUSE.CATEGORY     |   OUTAGE.DURATION |   DEMAND.LOSS.MW |
-|:-------------|:-------------------|:-------------------|:-------------------|------------------:|-----------------:|
 | Minnesota    | East North Central | normal             | severe weather     |              3060 |              nan |
 | Minnesota    | East North Central | normal             | intentional attack |                 1 |              nan |
 | Minnesota    | East North Central | cold               | severe weather     |              3000 |              nan |
@@ -80,8 +77,13 @@ I then also wanted to see the distribution per state of outage incidence in a vi
 ></iframe>
 
 ### Bivariate Analysis
-I then wanted to see the relationships between 
-
+I then wanted to see the relationships between the percentage of water area in the state compared to the overall water in the U.S vs. the duration of an outage. We can see that a true linear trend does not arise, and the graph is not terribly useful. 
+ <iframe
+  src="assets/water_vs_outage.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 
 
