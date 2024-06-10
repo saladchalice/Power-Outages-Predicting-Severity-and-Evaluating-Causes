@@ -34,14 +34,16 @@ The dataset is a collection of major power outages in the continental United Sta
 3. I then replaced values of 0 in `OUTAGE.DURATION` with `np.NaN`, as a severe power outage will not be just 0 minutes.
 
 This led to my dataset appearing like (only a select number of columns have been included for aesthetic purposes):
-<div style="overflow-x: auto;">
+
 
 | U.S._STATE   | CLIMATE.REGION     | CLIMATE.CATEGORY   | CAUSE.CATEGORY     |   OUTAGE.DURATION |   DEMAND.LOSS.MW |
+|:-------------|:-------------------|:-------------------|:-------------------|------------------:|-----------------:|
 | Minnesota    | East North Central | normal             | severe weather     |              3060 |              nan |
 | Minnesota    | East North Central | normal             | intentional attack |                 1 |              nan |
 | Minnesota    | East North Central | cold               | severe weather     |              3000 |              nan |
 | Minnesota    | East North Central | normal             | severe weather     |              2550 |              nan |
 | Minnesota    | East North Central | warm               | severe weather     |              1740 |              250 |
+
 
 ## Exploratory Data Analysis
 
