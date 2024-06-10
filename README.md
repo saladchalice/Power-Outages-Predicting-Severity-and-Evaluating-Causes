@@ -85,6 +85,15 @@ I then wanted to see the relationships between the percentage of water area in t
   frameborder="0"
 ></iframe>
 
+I then wanted to see the severity of outages per climate region, as measured by outage duration by climate region. I visualized this with multiple boxplots, from which we can see that average outage duration is highest in East North Central, while lowest average outage duration seems to be in in the West North Central region. 
+ <iframe
+  src="assets/region_vs_dur.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+### Grouping and Aggregates
 
 
 
