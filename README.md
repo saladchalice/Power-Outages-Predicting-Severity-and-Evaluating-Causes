@@ -34,7 +34,7 @@ The dataset is a collection of major power outages in the continental United Sta
 3. I then replaced values of 0 in `OUTAGE.DURATION` with `np.NaN`, as a severe power outage will not be just 0 minutes.
 
 This led to my dataset appearing like (only a select number of columns have been included for aesthetic purposes):
-
+<div style="overflow-x: visible;">
 
 | U.S._STATE   | CLIMATE.REGION     | CLIMATE.CATEGORY   | CAUSE.CATEGORY     |   OUTAGE.DURATION |   DEMAND.LOSS.MW |
 |:-------------|:-------------------|:-------------------|:-------------------|------------------:|-----------------:|
