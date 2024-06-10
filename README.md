@@ -44,6 +44,7 @@ This led to my dataset appearing like (only a select number of columns have been
 | Minnesota    | East North Central | warm               | severe weather     |              1740 |              250 |
 
 ## Exploratory Data Analysis
+
 ### Univariate Analysis
 
 Here, I wanted to take a look at how my variables of interest were distributed. 
