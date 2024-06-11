@@ -169,13 +169,29 @@ In my permutation test, I found an observed TVD of 0.0349, which, after comparin
 
 # Hypothesis Testing
 
-I want to investigate if outage duration during severe weather-caused outages is more or less than outage duration from outages caused by other intentional attacks. 
+I want to investigate if the climate in which an outage occurs is a significant vector for outage severity in terms of outage duration. To do this, I will perofrm a hypothesis test testing if outage duration during warm weather outages is more or less than outage duration from cold weather outages to see if weather is an impactful factor in outage severity. This is a good way to answer my question because it splits outage duration between two broad climate classifications, warm or cold, which will inform on whether climate in general impacts outage duration. 
 
-**Null:** Outage duration in warm regions is longer than outage duration in cold regions
+**Null:** Outage duration in cold regions is longer than outage duration in warm regions
 
-**Alt:**  Outage duration in warm regions is shorter than outage duration in warm regions
+**Alt:**  Outage duration in cold regions is shorter than outage duration in warm regions
 
 **Test Statistic:** Difference in Group Means, Mean of Cold Regions minus Mean of Warm Regions
+
+These hypotheses are 
+
+I performed a permutation test in which I shuffled an indicator variable for whether an outage took place in a cold or warm climate category. My observed test statistic (difference in group means) was 63.976, indicating that the mean outage duration of cold climate outages was greater than that of warm climate outages. After performing 1000 permutations, I found a p-value of 0.28, above my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that outage duration in cold regions is longer than outage duration in warm regions, and that it is highly likely that coldness of climate correlates to longer/more severe outages. 
+
+
+ <iframe
+  src="assets/hyp_test.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+# Prediction Model
+The problem I want to solve with my 
+##Baseline Model
 
 <div style="overflow-x: visible;">
 
