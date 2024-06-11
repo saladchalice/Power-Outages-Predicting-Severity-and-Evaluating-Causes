@@ -1,3 +1,5 @@
+<div style="overflow-x: visible;">
+
 # Power-Outages-Regional-Analysis-and-Predictions
 This was undertaken as a project for Data Science 80 at the University of California, San Diego. 
 Author: Edward Lu
@@ -34,7 +36,6 @@ The dataset is a collection of major power outages in the continental United Sta
 3. I then replaced values of 0 in `OUTAGE.DURATION` with `np.NaN`, as a severe power outage will not be just 0 minutes.
 
 This led to my dataset appearing like (only a select number of columns have been included for aesthetic purposes):
-<div style="overflow-x: visible;">
 
 | U.S._STATE   | CLIMATE.REGION     | CLIMATE.CATEGORY   | CAUSE.CATEGORY     |   OUTAGE.DURATION |   DEMAND.LOSS.MW |
 |:-------------|:-------------------|:-------------------|:-------------------|------------------:|-----------------:|
@@ -169,6 +170,14 @@ In my permutation test, I found an observed TVD of 0.0349, which, after comparin
 ></iframe>
 
 # Hypothesis Testing
+
+I want to investigate if outage duration during severe weather-caused outages is more or less than outage duration from outages caused by other intentional attacks. 
+
+**Null:** Outage duration in warm regions is longer than outage duration in cold regions
+
+**Alt:**  Outage duration in warm regions is shorter than outage duration in warm regions
+
+**Test Statistic:** Difference in Group Means, Mean of Cold Regions minus Mean of Warm Regions
 
 
 
