@@ -46,9 +46,7 @@ This led to my dataset appearing like (only a select number of columns have been
 
 
 ## Exploratory Data Analysis
-
 ### Univariate Analysis
-
 Here, I wanted to take a look at how my variables of interest were distributed. 
 
 Firstly, I wanted to take a look at the distribution of CLIMATE.REGION to get a general sense of how many outages happened in each climate region. Here, we can see that more outages occurred in the Northeast than any other region, followed by the South, West, and Central before leveling off. 
