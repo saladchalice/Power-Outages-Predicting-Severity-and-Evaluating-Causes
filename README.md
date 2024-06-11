@@ -1,4 +1,4 @@
-# Power-Outages-Regional-Analysis-and-Predictions
+# Power Outages: Predicting Severity and Evaluating Causes
 This was undertaken as a project for Data Science 80 at the University of California, San Diego. 
 Author: Edward Lu
 
@@ -226,7 +226,7 @@ In my final model, I have switched from sklearn LinearRegression() to sklearn Ra
 
 In addition to switching away from LinearRegression(), I have altered the numerical features present in the baseline model.
 - I have first used the FunctionTransformer() to log transform `TOTAL.CUSTOMERS`, which I did in order to counter an extremely faint positive skew in the plot of `TOTAL.CUSTOMERS` and `OUTAGE.DURATION`. I believe this helped transform the data in a way that made it easier for the model to capture the relationship between the two variables. 
-- I have also square root function transformed `PCT_LAND, because when I plotted `PCT_LAND` on `OUTAGE.DURATION`, there were faint hints of a parabolic function that made me want to linearize the column. I believe this new scaled feature was a positive addition to prediction because it helped linearize the data, making it easier for the model to capture the relationship between `PCT_LAND` and `OUTAGE.DURATION`.
+- I have also square root function transformed `PCT_LAND`, because when I plotted `PCT_LAND` on `OUTAGE.DURATION`, there were faint hints of a parabolic function that made me want to linearize the column. I believe this new scaled feature was a positive addition to prediction because it helped linearize the data, making it easier for the model to capture the relationship between `PCT_LAND` and `OUTAGE.DURATION`.
 - The final transformation I made was to standard scale all quantitative variables, which I did to allow the model to converge faster and make it easier for the model to understand the importance of each feature in prediction. 
 
 I then used GridSearchCV to determine the best parameters for my RandomForestRegressor.
