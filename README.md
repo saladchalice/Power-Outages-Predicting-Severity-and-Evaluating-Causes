@@ -189,9 +189,79 @@ I performed a permutation test in which I shuffled an indicator variable for whe
   frameborder="0"
 ></iframe>
 
-# Prediction Model
-The problem I want to solve with my 
-##Baseline Model
+# Prediction Modeling
+The problem I want to solve via prediction is the issue of predicting outage severity in terms of outage duration with immediately knowable factors. 
+
+The response variable of my model is thus `OUTAGE.DURATION`. I chose this framework as my prediction problem because I believe it is valuable for observers and policymakers to be able to factor in immediately available variables, such as climate region, outage duration, water percentage, and population to get quick estimates for how the severity of an outage in terms of its direct downtime. In addition, it has very few missing values. The metric I am using to gauge my model's accuracy is R^2. 
+
+## Baseline Model
+The features utilized in my baseline model are:
+
+| Column | Description|
+|----------|:--------:|
+| CLIMATE.REGION    |   String describing the climate region classification of the area in which the outage occurred   |
+| OUTAGE.DURATION | int outage duration in minutes |
+| CLIMATE.CATEGORY |   String describing the climate classification of the area in which the outage occurred   |
+| CAUSE.CATEGORY |   String categories for causes of outages   |
+| TOTAL.CUSTOMERS |   int of total number of customers per state   |
+| PCT_WATER_TOT |   Percentage of inland water area in the U.S. state as compared to the overall inland water area in the continental U.S. (in %)   |
+| AREAPCT_UC |   Percentage of the land area of the U.S. state represented by the land area of the urban clusters (in %)   |
+
+`CLIMATE.REGION`, `CLIMATE.CATEGORY`, and `CAUSE.CATEGORY` were the only nominal features, which I one-hot encoded for analysis via linear regression using a pipeline implementing the sklearn OneHotEncoder(). 
+
+### Performance
+I measured performance with R^2, though I have also included RMSE in the table below for a fuller picture. 
+
+| Metric | Value|
+|----------|:--------:|
+| Train RMSE   |   6565.890789350957   |
+| Test RMSE | 4316.823117558086 |
+| Train R^2 | 0.00024112351941119048|
+| Test R^2 | -0.004545917560775381 |
+
+This baseline model performed extremely poorly by R^2 metrics, with a nearly non-zero correlation coefficient for both training and testing. I believe this current linear regression model is extremely poor. Not only is it not correlating with the training data, it is also not generalizing to unseen data (the test R^2). 
+
+## Final Model
+In my final model, I have switched from sklearn LinearRegression() to sklearn RandomForestRegressor(), a function that uses Random Forests for regression rather than classification. Random Forest Regression is a regression model that trains multiple decision trees during training and outputs the average prediction of those trees when presented with features to predict with. It is an ensemble learning model with hyperparameters such as max depth and the minimum amount of samples required to split a node. 
+
+In addition to switching away from LinearRegression(), I have altered the numerical features present in the baseline model.
+- I have first used the FunctionTransformer() to log transform `TOTAL.CUSTOMERS`, which I did in order to counter an extremely faint positive skew in the plot of `TOTAL.CUSTOMERS` and `OUTAGE.DURATION`. I believe this helped transform the data in a way that made it easier for the model to capture the relationship between the two variables. 
+- I have also square root function transformed `PCT_LAND, because when I plotted `PCT_LAND` on `OUTAGE.DURATION`, there were faint hints of a parabolic function that made me want to linearize the column. I believe this new scaled feature was a positive addition to prediction because it helped linearize the data, making it easier for the model to capture the relationship between `PCT_LAND` and `OUTAGE.DURATION`.
+- The final transformation I made was to standard scale all quantitative variables, which I did to allow the model to converge faster and make it easier for the model to understand the importance of each feature in prediction. 
+
+I then used GridSearchCV to determine the best parameters for my RandomForestRegressor.
+- max_depth': None
+- min_samples_leaf': 16
+- min_samples_split': 5
+
+
+Finally, I measured performance with R^2 once more. 
+| Metric | Value|
+|----------|:--------:|
+| Train RMSE  5827.65933307443 |      
+| Test RMSE | 3683.5793885981757 |
+| Train R^2 |0.21241711159109478 |
+| Test R^2 | 0.26855554151707384 |
+
+Here we can see an immense improvement in my model's ability to capture the relationship between the given variables in the dataset and `OUTAGE.DURATION`. Correlation has soared up to .21 for training and .26 for test, while RMSE for both train and test have dropped. This final model's ability to predict `OUTAGE.DURATION` is a marked step up from the baseline model on the metric of R^2. 
+
+# Fairness Analysis
+My model seeks to predict outage duration given a variety of factors such as climate region, cause category, total customers in a state, etc. It's primary use case is evaluating the potential severity of an outage when it first occurs, without all the information. As such, it is imperative that it is effective for all demographics. In this case, I want to know if my model is fair in its predictions for two groups: areas with more vs. less total customers in a state. This way, I can tell if my model predicts fairly for states with less customers vs. areas with more customers, ensuring that neither one of these groups is favored with greater accuracy. 
+
+The evaluation metric I will use is the difference between the R^2 for `TOTAL.CUSTOMERS` values greater than the median minus the R^2 for values less than the median, as my model is a regression, not a classifier. 
+
+**Null Hypothesis:** The R^2 of predictions for outages in states with more customers than the median is the same as the R^2 for outages in states with less customers than the median, with any differences being due to chance. 
+
+**Alternate Hypothesis:** The R^2 of predictions for outages with more customers than the median is greater than than for outages with less customers than the median. 
+
+My observed R^2 difference came out to be 0.0188, which, after completing 1_000 shuffles for my permutation test, yielded a p-value of 0.402, which is far above my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that the R^2 difference between outages in states with more or less customers in the data is not significantly different and the model performs similarly for both groups. My conclusion is that my model has most likely achieved R^2 parity, and these two groups are treated fairly by the model.
+
+  <iframe
+  src="assets/fair.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 <div style="overflow-x: visible;">
 
