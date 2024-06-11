@@ -1,5 +1,3 @@
-<div style="overflow-x: visible;">
-
 # Power-Outages-Regional-Analysis-and-Predictions
 This was undertaken as a project for Data Science 80 at the University of California, San Diego. 
 Author: Edward Lu
@@ -179,5 +177,6 @@ I want to investigate if outage duration during severe weather-caused outages is
 
 **Test Statistic:** Difference in Group Means, Mean of Cold Regions minus Mean of Warm Regions
 
+<div style="overflow-x: visible;">
 
 
