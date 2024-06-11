@@ -97,6 +97,7 @@ I then wanted to see the severity of outages per climate region, as measured by 
 ></iframe>
 
 ### Grouping and Aggregates
+
 For my aggregation, I wanted a table that would show the average values of outage duration and customers affected per cause category per region, while also maintaining a count of how many instances of an outage type occurred in each region. To do this, I created a grouped dataframe indexed at the first level by cause category and at the second level by climate region. This is significant because it allows us to gauge the severity of causes in each region. For instance, we are able to see in the first few rows of the dataframe below that outage duration of outages caused by equipment failure is significantly longer in the East North Central area. 
 
 |                                             |   OUTAGE.DURATION |   CUSTOMERS.AFFECTED |   count |
@@ -108,13 +109,16 @@ For my aggregation, I wanted a table that would show the average values of outag
 | ('equipment failure', 'South')              |           295.778 |              62721.7 |      10 |
 
 # Assessment of Missingness
+
 ## NMAR Analysis
+
 A variable in the data that I believe is likely NMAR is cause category. My reasoning is that cause category may not be reported by a local agency if the cause category itself was decided to be too sensitive to reveal or was a cause that is difficult enough to detect that it was not detected. This means that the missingness of cause category depends on the values of the column itself. To better explain the missingness and make it MAR, I would like to have data on the outage cause category reporting protocol and if it differs between states, as it is possible that different states/regions have different outage reporting protocols or infrastructure that leads to some outage causes being missing and others not. 
 
 ## MAR Analysis
 To test for MAR, I will focus on the distribution of the missingness of `CUSTOMERS.AFFECTED`, which I believe is not trivial. 
 
 ### `CLIMATE.REGION`
+
 **Null Hypothesis:** The distribution of `CLIMATE.REGION` is the same for when `CUSTOMERS.AFFECTED` is missing and when it is not missing, with any deviations being due to random chance. 
 
 **Alternate Hypothesis:** The distribution of `CLIMATE.REGION` is DIFFERENT for when `CUSTOMERS.AFFECTED` is missing and when it is not missing. 
@@ -139,6 +143,7 @@ In my permutation test, I found an observed TVD of 0.2605, which, after comparin
 ></iframe>
 
 ### CLIMATE.CATEGORY
+
 Similarly, I will now test on `CLIMATE.CATEGORY` to see if `CUSTOMERS.AFFECTED` is also MAR dependent on whether a climate is categorized as cold, hot, or normal. 
 
 **Null Hypothesis:** The distribution of `CLIMATE.CATEGORY` is the same for when `CUSTOMERS.AFFECTED` is missing and when it is not missing, with any deviations being due to random chance. 
@@ -164,5 +169,8 @@ In my permutation test, I found an observed TVD of 0.0349, which, after comparin
   height="600"
   frameborder="0"
 ></iframe>
+
+# Hypothesis Testing
+
 
 
