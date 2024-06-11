@@ -22,6 +22,7 @@ The dataset is a collection of major power outages in the continental United Sta
 | PCT_LAND |   Percentage of land area in the U.S. state as compared to the overall land area in the continental U.S. (in %)   |
 | AREAPCT_UC |   Percentage of the land area of the U.S. state represented by the land area of the urban clusters (in %)   |
 
+My project is centered around the question: What are some of the important characteristics of severe power outages? To learn these characteristics is to understand factors that can lead to these outages, which is immensely important for mitigating the effects and incidence of severe outage events. This mitigation can then be enhanced by predictive algorithms, which pinpoint areas in the contiguous United States most susceptible to future outages and highlight areas in which intervention is most needed --and should intervention not be implementable, at the very least it is possible to afford those potentially affected with vital information to help prepare and better deal with outage events. 
 
 # Data Cleaning and Exploratory Data Analysis
 ## Data Cleaning
@@ -130,7 +131,7 @@ My test statistic will be tvd, and I will be performing a permutation test.
 ></iframe>
 
 
-In my permutation test, I found an observed TVD of 0.2605, which, after comparing to 1000 simulated TVDs, yielded a p-value of 0, which falls below my p-value threshold of 0.05. This means that I reject the null hypothesis in favor of the alternate hypothesis that the distribution of `CLIMATE.REGION` is indeed significantly different depending on the missingness of `CUSTOMERS.AFFECTED`, indicating that `CUSTOMERS.AFFECTED` is likely MAR dependent on `CLIMATE.REGION`. 
+In my permutation test, I found an observed TVD of 0.2685, which, after comparing to 1000 simulated TVDs, yielded a p-value of 0, which falls below my p-value threshold of 0.05. This means that I reject the null hypothesis in favor of the alternate hypothesis that the distribution of `CLIMATE.REGION` is indeed significantly different depending on the missingness of `CUSTOMERS.AFFECTED`, indicating that `CUSTOMERS.AFFECTED` is likely MAR dependent on `CLIMATE.REGION`. 
 
  <iframe
   src="assets/region_ptest.html"
@@ -158,7 +159,7 @@ My test statistic will be tvd, and I will be performing a permutation test.
 ></iframe>
 
 
-In my permutation test, I found an observed TVD of 0.0349, which, after comparing to 1000 simulated TVDs, yielded a p-value of 0.373, which does not fall below my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that the distribution of `CLIMATE.CATEGORY` is NOT significantly different depending on the missingness of `CUSTOMERS.AFFECTED`, indicating that `CUSTOMERS.AFFECTED` is most likely NOT MAR dependent on `CLIMATE.CATEGORY`. 
+In my permutation test, I found an observed TVD of 0.0349, which, after comparing to 1000 simulated TVDs, yielded a p-value of 0.362, which does not fall below my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that the distribution of `CLIMATE.CATEGORY` is NOT significantly different depending on the missingness of `CUSTOMERS.AFFECTED`, indicating that `CUSTOMERS.AFFECTED` is most likely NOT MAR dependent on `CLIMATE.CATEGORY`. 
 
  <iframe
   src="assets/cat_ptest.html"
@@ -179,7 +180,7 @@ I want to investigate if the climate in which an outage occurs is a significant 
 
 These hypotheses are 
 
-I performed a permutation test in which I shuffled an indicator variable for whether an outage took place in a cold or warm climate category. My observed test statistic (difference in group means) was 63.976, indicating that the mean outage duration of cold climate outages was greater than that of warm climate outages. After performing 1000 permutations, I found a p-value of 0.28, above my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that outage duration in cold regions is longer than outage duration in warm regions, and that it is highly likely that coldness of climate correlates to longer/more severe outages. 
+I performed a permutation test in which I shuffled an indicator variable for whether an outage took place in a cold or warm climate category. My observed test statistic (difference in group means) was 63.976, indicating that the mean outage duration of cold climate outages was greater than that of warm climate outages. After performing 1000 permutations, I found a p-value of 0.377, above my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that outage duration in cold regions is longer than outage duration in warm regions, and that it is highly likely that coldness of climate correlates to longer/more severe outages. 
 
 
  <iframe
@@ -190,9 +191,10 @@ I performed a permutation test in which I shuffled an indicator variable for whe
 ></iframe>
 
 # Prediction Modeling
-The problem I want to solve via prediction is the issue of predicting outage severity in terms of outage duration with immediately knowable factors. 
+## Framing a Prediction Problem
+The problem I want to solve via prediction is the issue of predicting outage severity in terms of outage duration with immediately knowable factors. I will be doing this via regression.
 
-The response variable of my model is thus `OUTAGE.DURATION`. I chose this framework as my prediction problem because I believe it is valuable for observers and policymakers to be able to factor in immediately available variables, such as climate region, outage duration, water percentage, and population to get quick estimates for how the severity of an outage in terms of its direct downtime. In addition, it has very few missing values. The metric I am using to gauge my model's accuracy is R^2. 
+The response variable of my model is thus `OUTAGE.DURATION`, as it is the only variable in the dataset that quantifies outage severity that is mostly intact for analysis (both customers affected and demand loss mw have substantial missing data). I chose this framework as my prediction problem because I believe it is valuable for observers and policymakers to be able to factor in immediately available variables, such as climate region, outage duration, water percentage, and population to get quick estimates for how the severity of an outage in terms of its direct downtime. In addition, it has very few missing values. The metric I am using to gauge my model's accuracy is R^2. 
 
 ## Baseline Model
 The features utilized in my baseline model are:
@@ -214,12 +216,12 @@ I measured performance with R^2, though I have also included RMSE in the table b
 
 | Metric | Value|
 |----------|:--------:|
-| Train RMSE   |   6565.890789350957   |
-| Test RMSE | 4316.823117558086 |
-| Train R^2 | 0.00024112351941119048|
-| Test R^2 | -0.004545917560775381 |
+| Train RMSE   |   5973.18217535236   |
+| Test RMSE | 3959.991327755403 |
+| Train R^2 | 0.17259244897415926|
+| Test R^2 | 0.154663239471875 |
 
-This baseline model performed extremely poorly by R^2 metrics, with a nearly non-zero correlation coefficient for both training and testing. I believe this current linear regression model is extremely poor. Not only is it not correlating with the training data, it is also not generalizing to unseen data (the test R^2). 
+This baseline model performed fairly weakly by R^2 metrics, with a lower correlation coefficient for both training and testing. I believe this current linear regression model is suboptimal. Not only is it not correlating too well with the training data, it is also not generalizing well to unseen data (the test R^2). 
 
 ## Final Model
 In my final model, I have switched from sklearn LinearRegression() to sklearn RandomForestRegressor(), a function that uses Random Forests for regression rather than classification. Random Forest Regression is a regression model that trains multiple decision trees during training and outputs the average prediction of those trees when presented with features to predict with. It is an ensemble learning model with hyperparameters such as max depth and the minimum amount of samples required to split a node. 
@@ -238,12 +240,12 @@ I then used GridSearchCV to determine the best parameters for my RandomForestReg
 Finally, I measured performance with R^2 once more. 
 | Metric | Value|
 |----------|:--------:|
-| Train RMSE  5827.65933307443 |      
-| Test RMSE | 3683.5793885981757 |
-| Train R^2 |0.21241711159109478 |
-| Test R^2 | 0.26855554151707384 |
+| Train RMSE  5820.279493577417|      
+| Test RMSE | 3691.6110058171967|
+| Train R^2 |0.21441055520933183 |
+| Test R^2 | 0.2653624047237376 |
 
-Here we can see an immense improvement in my model's ability to capture the relationship between the given variables in the dataset and `OUTAGE.DURATION`. Correlation has soared up to .21 for training and .26 for test, while RMSE for both train and test have dropped. This final model's ability to predict `OUTAGE.DURATION` is a marked step up from the baseline model on the metric of R^2. 
+Here we can see an improvement in my model's ability to capture the relationship between the given variables in the dataset and `OUTAGE.DURATION`. Correlation has gone up to ~.21 for training and ~.26 for test, while RMSE for both train and test have dropped. This final model's ability to predict `OUTAGE.DURATION` is a marked step up from the baseline model on the metric of R^2. 
 
 # Fairness Analysis
 My model seeks to predict outage duration given a variety of factors such as climate region, cause category, total customers in a state, etc. It's primary use case is evaluating the potential severity of an outage when it first occurs, without all the information. As such, it is imperative that it is effective for all demographics. In this case, I want to know if my model is fair in its predictions for two groups: areas with more vs. less total customers in a state. This way, I can tell if my model predicts fairly for states with less customers vs. areas with more customers, ensuring that neither one of these groups is favored with greater accuracy. 
@@ -254,7 +256,7 @@ The evaluation metric I will use is the difference between the R^2 for `TOTAL.CU
 
 **Alternate Hypothesis:** The R^2 of predictions for outages with more customers than the median is greater than than for outages with less customers than the median. 
 
-My observed R^2 difference came out to be 0.0188, which, after completing 1_000 shuffles for my permutation test, yielded a p-value of 0.402, which is far above my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that the R^2 difference between outages in states with more or less customers in the data is not significantly different and the model performs similarly for both groups. My conclusion is that my model has most likely achieved R^2 parity, and these two groups are treated fairly by the model.
+My observed R^2 difference came out to be 0.013132378109592668, which, after completing 1_000 shuffles for my permutation test, yielded a p-value of 0.431, which is far above my p-value threshold of 0.05. This means that I fail to reject the null hypothesis that the R^2 difference between outages in states with more or less customers in the data is not significantly different and the model performs similarly for both groups. My conclusion is that my model has most likely achieved R^2 parity, and these two groups are treated fairly by the model.
 
   <iframe
   src="assets/fair.html"
